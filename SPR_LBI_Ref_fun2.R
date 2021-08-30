@@ -1,17 +1,17 @@
 
-################################################################################################################################################################
+#########################################################################################################################
 ### File: SPR_LBI_Ref_fun2.R
 ### Created: 16/08/2021
 ### Author: Yves Reecht, Tanja Miethe
 ###
-###############################################################################################################################################################
+#########################################################################################################################
 ### Description:
-### Functions to calculate SPR-based reference points for LBIs: Lmax5% and Lmean
-### using the simulation tool in R-library LBSPR with setting CVLinf and define selectivity and maturity ogives
+###   Functions to calculate SPR-based reference points for LBIs: Lmax5% and Lmean using the simulation tool in
+###   R-library LBSPR with setting CVLinf and define selectivity and maturity ogives
 ###
-### Miethe, T., Reecht, Y., and Dobby, H. 2019. Reference points for length-based indicator Lmax5% to support assessment of data-limited stocks and fisheries.
-###  ICES Journal of Marine Science, 76:7, 2125-2139.
-###############################################################################################################################################################
+### Miethe, T., Reecht, Y., and Dobby, H. 2019. Reference points for length-based indicator Lmax5% to support
+### assessment of data-limited stocks and fisheries.  ICES Journal of Marine Science, 76:7, 2125-2139.
+#########################################################################################################################
 
 
 ##' @title Lmax<P>% Lmean estimation from abundances/proportions at length.
@@ -19,7 +19,7 @@
 ##' @param NbyBin A numeric vector of abundance/proportion by length-bin.
 ##' @return Lmax<P>% and Lmean value estimated from abundances/proportions at length (length-one numeric vector).
 ##' @author Yves Reecht
-##' 
+##'
 LmaxPcalc1 <- function(Lmids, NbyBin, P = 0.05)
 {
 
@@ -86,7 +86,7 @@ LmaxPcalc <- function(Lmids, NbyBin, P = 0.05)
 
 Lmeancalc <- function(Lmids, NbyBin)
 {
- 
+
   return(Lmeancalc1(Lmids = Lmids, NbyBin = NbyBin))
 }
 
@@ -125,8 +125,8 @@ Lmeancalc <- function(Lmids, NbyBin)
 ##'                                        F/M, F (if M available), SPR.
 ##'    $simSizeDist: LBSPR simulation object (e.g. for plotting purpose).
 ##' @author Yves Reecht, Tanja Miethe
- 
- 
+
+
 LmaxP_Lmean_ref_LBSPR2 <- function(M, k, MK = M/k,
                                Linf, Lm50, Lm95,
                                Ls5, Ls50, Ls95,
@@ -141,7 +141,7 @@ LmaxP_Lmean_ref_LBSPR2 <- function(M, k, MK = M/k,
                                BinWidth = numeric(0),
                                Control = list(modtype = "GTG", ngtg = 101))
 {
- 
+
     require(LBSPR)
 
     ## Parameters initialisation:
@@ -208,24 +208,24 @@ LmaxP_Lmean_ref_LBSPR2 <- function(M, k, MK = M/k,
 
     ## Unfished LmaxP%:
     LmaxPUF <- LmaxPcalc(Lmids = simSizeDist@pLPop[ , "LMids"],
-                         NbyBin=simSizeDist@pLPop[ , "VulnUF"],
+                         NbyBin = simSizeDist@pLPop[ , "VulnUF"],
                          P = P)
 
     ## LmaxP% at SPR = <SPRref>:
     LmaxPF <- LmaxPcalc(Lmids = simSizeDist@pLPop[ , "LMids"],
-                        NbyBin=simSizeDist@pLPop[ , "VulnF"],
+                        NbyBin = simSizeDist@pLPop[ , "VulnF"],
                         P = P)
 
- 
+
     ## Unfished Lmean:
     LmeanUF <- Lmeancalc(Lmids = simSizeDist@pLPop[ , "LMids"],
-                         NbyBin=simSizeDist@pLPop[ , "VulnUF"])
-    
+                         NbyBin = simSizeDist@pLPop[ , "VulnUF"])
+
     ## Lmean at SPR = <SPRref>:
     LmeanF <- Lmeancalc(Lmids = simSizeDist@pLPop[ , "LMids"],
-                        NbyBin=simSizeDist@pLPop[ , "VulnF"])
-    
-    
+                        NbyBin = simSizeDist@pLPop[ , "VulnF"])
+
+
 
     ## In case it is too selective, bring the SPR down to the reference point:
     if (simSizeDist@SPR > SPRref &&
@@ -237,7 +237,7 @@ LmaxP_Lmean_ref_LBSPR2 <- function(M, k, MK = M/k,
                 "% will be overestimated and the associated F underestimated")
     }
 
-    if (LmaxPF/LmaxPUF > 0.9)
+    if (LmaxPF / LmaxPUF > 0.9)
         warning("Lmax",
                 round(P * ifelse(P > 1, 1, 100)),
                 "% ref point (",
@@ -248,11 +248,11 @@ LmaxP_Lmean_ref_LBSPR2 <- function(M, k, MK = M/k,
                 "\n  maybe too low a contrast for an HCR to perform decently.")
 
     return(list(res = round(c(LmaxPRP = LmaxPF, LmaxPUF = LmaxPUF,
-                        LmeanRP=LmeanF, LmeanUF=LmeanUF,
-                        F_M = as.vector(simSizeDist@FM),
-                        F = as.vector(simSizeDist@FM * simSizeDist@M),
-                        M_k=M/k,
-                        SPR = simSizeDist@SPR),3),
+                              LmeanRP=LmeanF, LmeanUF = LmeanUF,
+                              F_M = as.vector(simSizeDist@FM),
+                              F = as.vector(simSizeDist@FM * simSizeDist@M),
+                              M_k = M/k,
+                              SPR = simSizeDist@SPR),3),
                 simSizeDist = simSizeDist))
 }
 
