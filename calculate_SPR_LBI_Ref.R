@@ -60,22 +60,27 @@ library(LBSPR)
 source(file = "SPR_LBI_Ref_fun2.R")
 
 ## basic life history parameters as above
-## CV for Linf
-CVLinf <- 0.000001
+
+## CV for Linf:
+CVLinf <- 0.000001 # LBSPR cannot use CV = 0... very small value instead
 
 ## selectivity ogive, length 5%, length 95%
-Ls5 <- Lc - 0.01
-Ls95 <- Lc + 0.01
+Ls5 <- Lc - 0.01  # emulate cutting edge selectivity by using
+Ls95 <- Lc + 0.01 # very close Ls5% and Ls95%.
 
 ## maturity ogive, length 95%
-Lm95 <- Lmat+0.01
+Lm95 <- Lmat + 0.01 # emulate cutting edge maturity ogive: very close Lm50% and Lm95%.
 
-res2 <- LmaxP_Lmean_ref_LBSPR2(M, k, MK = M / k,
+res2 <- LmaxP_Lmean_ref_LBSPR2(M, k,
+                               ## MK = M / k, # or alternatively
                                Linf = Linf, Lm50 = Lmat, Lm95 = Lm95,
-                               Ls5 = Ls5, Ls50 = Lc, Ls95 = Ls95,
+                               Ls5 = Ls5,
+                               ## Ls50 = Lc, # One of Ls5 and Ls50 must be given.
+                               Ls95 = Ls95,
                                P = 0.05,
                                SPRref = SPRref,
                                FMref = NULL,
+                               ## Additional LBSPR (optional) parameters:
                                Mpow = 0, Wbeta = b, Walpha = 1e-04,
                                FecB = b, R0 = 10000,
                                CVLinf = CVLinf, Steepness = 0.7,
