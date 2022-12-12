@@ -250,7 +250,6 @@ LmaxP_Lmean_ref_LBSPR2 <- function(M, k, MK = M/k,
     return(list(res = round(c(LmaxPRP = LmaxPF, LmaxPUF = LmaxPUF,
                               LmeanRP=LmeanF, LmeanUF = LmeanUF,
                               F_M = as.vector(simSizeDist@FM),
-                              F = as.vector(simSizeDist@FM * simSizeDist@M),
                               M_k = M/k,
                               SPR = simSizeDist@SPR),3),
                 simSizeDist = simSizeDist))
